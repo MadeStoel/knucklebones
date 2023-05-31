@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, signOut as firebaseSignOut, type User, type UserCredential } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut as firebaseSignOut, type User, type UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
 import { writable } from "svelte/store";
 import { auth } from "../firebase";
 
@@ -14,6 +14,10 @@ function signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(auth, email, password);
 }
 
+function register(email: string, password: string): Promise<UserCredential> {
+    return createUserWithEmailAndPassword(auth, email, password);
+}
+
 function signOut(): Promise<void> {
     return firebaseSignOut(auth);
 }
@@ -25,4 +29,5 @@ export const userStore = {
     signIn,
     signOut,
     setLoading,
+    register
 }

@@ -3,25 +3,30 @@
     import { onMount } from 'svelte';
     import { auth } from './lib/firebase';
     import { userStore } from './lib/stores/user.store';
-    import SignIn from './lib/pages/SignIn.svelte';
     import Spinner from './lib/components/Spinner.svelte';
-    import Dashboard from './lib/pages/Dashboard.svelte';
+    import Authenticate from './lib/pages/Authenticate.svelte';
+    import Layout from './lib/pages/Layout.svelte';
 
-    onMount(() =>
-        onAuthStateChanged(auth, (user) => {
+    onMount(() => {
+        const app = document.getElementById('app');
+        app.style.height = `${window.innerHeight}px`;
+        app.style.overflow = 'hidden';
+        app.style.padding = '1rem';
+
+        return onAuthStateChanged(auth, (user) => {
             if (user) {
                 userStore.set({ isLoading: false, user });
             } else {
                 userStore.set({ isLoading: false, user: null });
             }
-        })
-    );
+        });
+    });
 </script>
 
 {#if $userStore.user}
-    <Dashboard />
+    <Layout />
 {:else if !$userStore.isLoading}
-    <SignIn />
+    <Authenticate />
 {:else}
     <Spinner />
 {/if}
